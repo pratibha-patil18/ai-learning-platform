@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminex | SkillGap AI - Illuminate the gaps. Unlock your potential</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP NAVIGATION BAR
+       ======================================================== -->
+  <header class="app-header">
+    <div class="nav-container">
+      <div class="logo-area" onclick="navigateTo('welcome')">
+        <!-- Cute Robot Mascot SVG Logo -->
+        <div class="robot-logo-icon">
+          <svg viewBox="0 0 52 52" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Antenna -->
+            <line x1="32" y1="12" x2="32" y2="4" stroke="#6366F1" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="4" r="3.5" fill="#F59E0B"/>
+            <circle cx="32" cy="4" r="6" stroke="#F59E0B" stroke-width="1.5" opacity="0.5"/>
+            <!-- Ears / Bolts -->
+            <rect x="8" y="24" width="4" height="12" rx="2" fill="#818CF8"/>
+            <rect x="52" y="24" width="4" height="12" rx="2" fill="#818CF8"/>
+            <!-- Head -->
+            <rect x="12" y="12" width="40" height="34" rx="10" fill="#4F46E5"/>
+            <!-- Face Screen -->
+            <rect x="17" y="17" width="30" height="24" rx="6" fill="#1E1B4B"/>
+            <!-- Cute Glowing Eyes -->
+            <circle cx="25" cy="28" r="4" fill="#38BDF8"/>
+            <circle cx="26" cy="27" r="1.5" fill="#FFFFFF"/>
+            <circle cx="39" cy="28" r="4" fill="#38BDF8"/>
+            <circle cx="40" cy="27" r="1.5" fill="#FFFFFF"/>
+            <!-- Cheerful Smile -->
+            <path d="M28 34 C30 36.5, 34 36.5, 36 34" stroke="#38BDF8" stroke-width="2" stroke-linecap="round"/>
+            <!-- Body Peek -->
+            <path d="M20 48 C20 47, 44 47, 44 48 L46 58 C46 60, 18 60, 18 58 Z" fill="#6366F1"/>
+            <!-- Glowing Core -->
+            <circle cx="32" cy="53" r="2.5" fill="#10B981"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">Luminex</span>
+          <span class="brand-sub">SkillGap AI</span>
+        </div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <nav class="nav-links">
+        <button id="nav-btn-skills" class="nav-btn" onclick="navigateTo('skills')">Skills</button>
+        <button id="nav-btn-dashboard" class="nav-btn" onclick="navigateTo('dashboard')">Dashboard</button>
+        <button id="nav-btn-reset" class="nav-btn-ghost" onclick="restartApp()">Restart</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================
+       MAIN APP CONTAINER (Single Page Application Screens)
+       ======================================================== -->
+  <main class="app-container">
+
+    <!-- ==========================================
+         SCREEN 1: WELCOME / LANDING SCREEN
+         ========================================== -->
+    <section id="screen-welcome" class="screen active">
+      <div class="hero-card">
+        <!-- Cute Big Robot Mascot Display -->
+        <div class="mascot-hero-container">
+          <div class="robot-hero-avatar floating-animation">
+            <svg viewBox="0 0 100 100" width="120" height="120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Glow halo -->
+              <circle cx="50" cy="50" r="46" fill="#EEF2FF"/>
+              <!-- Antenna -->
+              <line x1="50" y1="22" x2="50" y2="8" stroke="#4F46E5" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="50" cy="8" r="6" fill="#F59E0B"/>
+              <circle cx="50" cy="8" r="10" stroke="#F59E0B" stroke-width="2" opacity="0.4"/>
+              <!-- Ears -->
+              <rect x="14" y="38" width="6" height="18" rx="3" fill="#818CF8"/>
+              <rect x="80" y="38" width="6" height="18" rx="3" fill="#818CF8"/>
+              <!-- Robot Head -->
+              <rect x="20" y="20" width="60" height="52" rx="16" fill="#4F46E5"/>
+              <!-- Inner Screen Face -->
+              <rect x="27" y="27" width="46" height="38" rx="10" fill="#0F172A"/>
+              <!-- Blush Cheeks -->
+              <circle cx="33" cy="52" r="3" fill="#F472B6" opacity="0.8"/>
+              <circle cx="67" cy="52" r="3" fill="#F472B6" opacity="0.8"/>
+              <!-- Big Cute Eyes -->
+              <circle cx="38" cy="42" r="6" fill="#38BDF8"/>
+              <circle cx="40" cy="40" r="2.5" fill="#FFFFFF"/>
+              <circle cx="62" cy="42" r="6" fill="#38BDF8"/>
+              <circle cx="64" cy="40" r="2.5" fill="#FFFFFF"/>
+              <!-- Smile -->
+              <path d="M44 51 C46 55, 54 55, 56 51" stroke="#38BDF8" stroke-width="3" stroke-linecap="round"/>
+              <!-- Body -->
+              <path d="M30 74 C30 72, 70 72, 70 74 L74 94 C74 96, 26 96, 26 94 Z" fill="#6366F1"/>
+              <circle cx="50" cy="84" r="4" fill="#10B981"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 class="hero-title">Luminex</h1>
+        <p class="hero-tagline">Illuminate the gaps. Unlock your potential.</p>
+        <p class="hero-description">
+          An AI-powered skill assessment platform that diagnoses hidden competency gaps in your coding knowledge, provides personalized recommendations, and helps you retest to achieve true mastery.
+        </p>
+
+        <!-- Feature Pills -->
+        <div class="features-pills">
+          <span class="pill">🎯 Diagnostic Assessment</span>
+          <span class="pill">⚡ Instant Gap Detection</span>
+          <span class="pill">📈 Targeted Retake & Improvement</span>
+        </div>
+
+        <button class="btn btn-primary btn-lg" onclick="navigateTo('skills')">
+          Get Started
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 2: SKILL SELECTION SCREEN
+         ========================================== -->
+    <section id="screen-skills" class="screen">
+      <div class="screen-header">
+        <span class="screen-badge">Step 1 of 4</span>
+        <h2>Choose Your Assessment Track</h2>
+        <p>Select the technology you want to benchmark today. Luminex will evaluate your strengths and pinpoint your weak spots.</p>
+      </div>
+
+      <!-- Skill Selection Cards Grid -->
+      <div class="skills-grid" id="skills-grid">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+
+      <!-- Actions -->
+      <div class="screen-actions">
+        <button id="btn-start-assessment" class="btn btn-primary btn-lg" disabled onclick="startInitialQuiz()">
+          Start Assessment
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 3: INITIAL QUIZ SCREEN
+         ========================================== -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-container">
+        <!-- Top Quiz Meta Bar -->
+        <div class="quiz-top-bar">
+          <div class="quiz-meta-left">
+            <span class="badge badge-skill" id="quiz-skill-name">Python</span>
+            <span class="badge badge-topic" id="quiz-topic-name">Topic: Basics</span>
+          </div>
+          <div class="quiz-meta-right">
+            <span class="question-counter" id="quiz-counter">Question 1/10</span>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill" id="quiz-progress-fill" style="width: 10%;"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card">
+          <h3 class="question-text" id="quiz-question-text">Loading question...</h3>
+
+          <!-- Options List -->
+          <div class="options-list" id="quiz-options-list">
+            <!-- Dynamically generated options -->
+          </div>
+        </div>
+
+        <!-- Quiz Navigation Controls -->
+        <div class="quiz-controls">
+          <button id="btn-quiz-prev" class="btn btn-secondary" onclick="prevQuestion()" disabled>
+            ← Previous
+          </button>
+          <button id="btn-quiz-next" class="btn btn-primary" onclick="nextQuestion()" disabled>
+            Next →
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 4: RESULT SCREEN
+         ========================================== -->
+    <section id="screen-results" class="screen">
+      <div class="results-container">
+        <div class="screen-header">
+          <span class="screen-badge">Assessment Completed</span>
+          <h2>Your Skill Diagnostic Report</h2>
+          <p>Here is your overall score and topic-by-topic competency breakdown.</p>
+        </div>
+
+        <!-- Overall Score Card -->
+        <div class="overall-score-card">
+          <div class="score-circle">
+            <span class="score-number" id="result-overall-score">0%</span>
+            <span class="score-label">Overall Score</span>
+          </div>
+          <div class="score-summary">
+            <h3 id="result-score-title">Assessment Summary</h3>
+            <p id="result-score-description">We analyzed your answers across all core modules to identify areas where you shine and topics that need improvement.</p>
+          </div>
+        </div>
+
+        <!-- Topic Breakdown Section -->
+        <div class="topic-breakdown-card">
+          <div class="card-header-flex">
+            <h3>Topic-wise Performance</h3>
+            <div class="legend">
+              <span class="legend-item"><span class="legend-dot green"></span> Strong (≥70%)</span>
+              <span class="legend-item"><span class="legend-dot yellow"></span> Average (50-69%)</span>
+              <span class="legend-item"><span class="legend-dot red"></span> Weak (&lt;50%)</span>
+            </div>
+          </div>
+
+          <div class="topic-list" id="result-topics-list">
+            <!-- Rendered dynamically by script.js -->
+          </div>
+        </div>
+
+        <!-- Weakest Topic Callout Banner -->
+        <div class="weak-callout-banner" id="result-weak-banner">
+          <div class="weak-callout-icon">⚠</div>
+          <div class="weak-callout-content">
+            <h4>Competency Gap Detected</h4>
+            <p id="result-weak-summary">We found that <strong>Recursion</strong> is currently your weakest area (30% proficiency).</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="screen-actions">
+          <button class="btn btn-primary btn-lg" onclick="navigateTo('gap')">
+            Inspect Competency Gap
+            <span class="btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 5: COMPETENCY GAP UI
+         ========================================== -->
+    <section id="screen-gap" class="screen">
+      <div class="gap-container">
+        <div class="screen-header">
+          <span class="screen-badge badge-warning">AI Diagnostic Alert</span>
+          <h2>Competency Gap Deep-Dive</h2>
+          <p>Luminex detected a critical knowledge gap that may be holding back your progress.</p>
+        </div>
+
+        <!-- Focused Competency Gap Card -->
+        <div class="competency-gap-card">
+          <div class="gap-card-top">
+            <div class="gap-warning-badge">
+              <span class="icon">⚠</span>
+              <span>Competency Gap Detected</span>
+            </div>
+            <span class="gap-level-pill" id="gap-level-tag">Needs Immediate Reinforcement</span>
+          </div>
+
+          <div class="gap-hero-info">
+            <h3 class="gap-topic-title" id="gap-topic-name">Recursion</h3>
+            <div class="gap-stat">
+              <span class="gap-stat-num" id="gap-proficiency">30%</span>
+              <span class="gap-stat-label">Proficiency</span>
+            </div>
+          </div>
+
+          <!-- Progress Visualization -->
+          <div class="gap-meter-box">
+            <div class="gap-meter-labels">
+              <span>Current Mastery</span>
+              <span>Target: 70%+</span>
+            </div>
+            <div class="progress-bar-wrapper">
+              <div class="progress-bar-fill red" id="gap-meter-fill" style="width: 30%;"></div>
+            </div>
+          </div>
+
+          <!-- Explanation and Recommended Action -->
+          <div class="gap-explanation-box">
+            <h4>💡 Why This Gap Matters:</h4>
+            <p id="gap-explanation-text">
+              Focus on recursion fundamentals, base cases, call stack mechanics, and recursive problem solving.
+            </p>
+          </div>
+
+          <div class="gap-action-box">
+            <h4>🎯 Recommended Action Plan:</h4>
+            <p id="gap-recommended-action">
+              Review core visual concepts for 10-15 minutes, examine base-case boundary conditions, and take the targeted retake quiz to close this gap.
+            </p>
+          </div>
+
+          <div class="gap-card-footer">
+            <button class="btn btn-primary btn-lg" onclick="navigateTo('learning')">
+              Improve This Skill
+              <span class="btn-arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 6: RECOMMENDED LEARNING SECTION
+         ========================================== -->
+    <section id="screen-learning" class="screen">
+      <div class="learning-container">
+        <div class="screen-header">
+          <span class="screen-badge">Step 3 of 4</span>
+          <h2>Recommended for You</h2>
+          <p>Curated, bite-sized learning materials personalized for your gap in <strong id="learning-topic-name">Recursion</strong>.</p>
+        </div>
+
+        <!-- Learning Resource Cards Grid -->
+        <div class="learning-grid" id="learning-resources-grid">
+          <!-- Rendered dynamically by script.js -->
+        </div>
+
+        <!-- Prompt to Retake Quiz -->
+        <div class="retake-cta-card">
+          <div class="cta-text">
+            <h3>Ready to prove your improvement?</h3>
+            <p>Take a short 5-question targeted quiz focusing strictly on your weak area to measure how much you have grown.</p>
+          </div>
+          <button class="btn btn-accent btn-lg" id="btn-start-retake" onclick="startTargetedRetake()">
+            Take Quiz Again 🚀
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 7: TARGETED RETAKE QUIZ
+         ========================================== -->
+    <section id="screen-retake" class="screen">
+      <div class="quiz-container">
+        <!-- Retake Top Bar -->
+        <div class="quiz-top-bar">
+          <div class="quiz-meta-left">
+            <span class="badge badge-warning">Targeted Retake</span>
+            <span class="badge badge-topic" id="retake-topic-badge">Topic: Recursion</span>
+          </div>
+          <div class="quiz-meta-right">
+            <span class="question-counter" id="retake-counter">Question 1/5</span>
+          </div>
+        </div>
+
+        <!-- Notice -->
+        <div class="retake-info-banner">
+          <span>⚡ Focused 5-question challenge dedicated exclusively to reinforcing this topic.</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill purple" id="retake-progress-fill" style="width: 20%;"></div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card">
+          <h3 class="question-text" id="retake-question-text">Loading question...</h3>
+
+          <!-- Options List -->
+          <div class="options-list" id="retake-options-list">
+            <!-- Dynamically generated options -->
+          </div>
+        </div>
+
+        <!-- Quiz Navigation Controls -->
+        <div class="quiz-controls">
+          <button id="btn-retake-prev" class="btn btn-secondary" onclick="prevRetakeQuestion()" disabled>
+            ← Previous
+          </button>
+          <button id="btn-retake-next" class="btn btn-primary" onclick="nextRetakeQuestion()" disabled>
+            Next →
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 8: IMPROVEMENT SCREEN
+         ========================================== -->
+    <section id="screen-improvement" class="screen">
+      <div class="improvement-container">
+        <div class="screen-header">
+          <span class="screen-badge badge-success">Growth Verified</span>
+          <h2>Skill Gap Closure Report</h2>
+          <p>Here is your before vs. after comparison for <strong id="improve-topic-name">Recursion</strong>.</p>
+        </div>
+
+        <div class="improvement-card">
+          <!-- Celebration Badge -->
+          <div class="celebration-header">
+            <div class="celebration-icon">🎉</div>
+            <h3 id="improvement-headline">Outstanding Progress!</h3>
+            <p id="improvement-message">Great! Your proficiency improved significantly.</p>
+          </div>
+
+          <!-- Before / After Visual Comparison -->
+          <div class="comparison-grid">
+            <!-- BEFORE CARD -->
+            <div class="comp-box before-box">
+              <span class="comp-tag">BEFORE</span>
+              <h4 class="comp-topic" id="improve-before-topic">Recursion</h4>
+              <div class="comp-score-val red-text" id="improve-before-score">30%</div>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill red" id="improve-before-bar" style="width: 30%;"></div>
+              </div>
+              <span class="comp-caption">Initial Assessment</span>
+            </div>
+
+            <!-- DELTA / ARROW -->
+            <div class="comp-arrow-box">
+              <div class="delta-badge" id="improve-delta-badge">+45%</div>
+              <span class="arrow-symbol">➔</span>
+            </div>
+
+            <!-- AFTER CARD -->
+            <div class="comp-box after-box">
+              <span class="comp-tag green-tag">AFTER</span>
+              <h4 class="comp-topic" id="improve-after-topic">Recursion</h4>
+              <div class="comp-score-val green-text" id="improve-after-score">75%</div>
+              <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill green" id="improve-after-bar" style="width: 75%;"></div>
+              </div>
+              <span class="comp-caption">Targeted Retake</span>
+            </div>
+          </div>
+
+          <!-- Growth Summary Statement -->
+          <div class="growth-metric-banner">
+            <div class="metric-icon">🚀</div>
+            <div class="metric-info">
+              <h4>Gap Closure Achieved</h4>
+              <p id="improve-metric-desc">You successfully elevated your understanding and converted a critical weakness into a verified competency.</p>
+            </div>
+          </div>
+
+          <!-- Next Actions -->
+          <div class="screen-actions">
+            <button class="btn btn-primary btn-lg" onclick="navigateTo('dashboard')">
+              Return to Dashboard
+              <span class="btn-arrow">→</span>
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="restartApp()">
+              Test Another Skill
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==========================================
+         SCREEN 9: SIMPLE PROGRESS DASHBOARD
+         ========================================== -->
+    <section id="screen-dashboard" class="screen">
+      <div class="dashboard-container">
+        <div class="screen-header">
+          <span class="screen-badge">Analytics Overview</span>
+          <h2>Learning Progress Dashboard</h2>
+          <p>Continuous track of your assessments, detected competency gaps, and verified improvements.</p>
+        </div>
+
+        <!-- Top Metric Stat Cards -->
+        <div class="stats-overview-grid">
+          <div class="stat-card">
+            <span class="stat-title">Active Skill Track</span>
+            <div class="stat-value" id="dash-skill-name">Python</div>
+            <span class="stat-sub">Benchmarked technology</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-title">Overall Score</span>
+            <div class="stat-value highlight" id="dash-overall-score">72%</div>
+            <span class="stat-sub" id="dash-overall-status">Solid Proficiency</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-title">Quizzes Completed</span>
+            <div class="stat-value" id="dash-quizzes-completed">2</div>
+            <span class="stat-sub">Assessments & retakes</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="stat-title">Verified Improvement</span>
+            <div class="stat-value green-text" id="dash-improvement-stat">+45%</div>
+            <span class="stat-sub" id="dash-improved-topic">Recursion</span>
+          </div>
+        </div>
+
+        <!-- Detailed Breakdown Grid -->
+        <div class="dash-details-grid">
+          <!-- Competency Gaps List -->
+          <div class="dash-card">
+            <div class="card-header-flex">
+              <h3>Competency Gaps Status</h3>
+              <span class="chip-count" id="dash-gap-count">1 Identified</span>
+            </div>
+            <div class="gaps-list" id="dash-gaps-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Growth & Learning History -->
+          <div class="dash-card">
+            <div class="card-header-flex">
+              <h3>Improvement Journey</h3>
+              <span class="chip-count green-chip" id="dash-resolved-count">1 Closed</span>
+            </div>
+            <div class="history-list" id="dash-history-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Action Buttons -->
+        <div class="dash-actions">
+          <button class="btn btn-primary" onclick="navigateTo('skills')">
+            Assess Another Skill
+          </button>
+          <button class="btn btn-secondary" onclick="restartApp()">
+            Restart Fresh Demo 
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       FOOTER
+       ======================================================== -->
+  <footer class="app-footer">
+    <div class="footer-container">
+      <p><strong>Luminex</strong> &bull; SkillGap AI &bull; Built with Vanilla HTML, CSS & JavaScript</p>
+      <p class="footer-sub">Hackathon Ready &bull; Modular API Integration Architecture</p>
+    </div>
+  </footer>
+
+  <!-- Script file containing beginner-friendly logic and mock data -->
+  <script src="script.js"></script>
+</body>
+</html>
