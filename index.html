@@ -16,7 +16,7 @@
       <div class="logo-area" onclick="navigateTo('welcome')">
         <!-- Cute Robot Mascot SVG Logo -->
         <div class="robot-logo-icon">
-          <svg viewBox="0 0 52 52" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 64 64" width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Antenna -->
             <line x1="32" y1="12" x2="32" y2="4" stroke="#6366F1" stroke-width="3" stroke-linecap="round"/>
             <circle cx="32" cy="4" r="3.5" fill="#F59E0B"/>
@@ -110,7 +110,7 @@
         <div class="features-pills">
           <span class="pill">🎯 Diagnostic Assessment</span>
           <span class="pill">⚡ Instant Gap Detection</span>
-          <span class="pill">📈 Targeted Retake & Improvement</span>
+          <span class="pill">📚Personalized Learning</span>
         </div>
 
         <button class="btn btn-primary btn-lg" onclick="navigateTo('skills')">
@@ -126,7 +126,7 @@
          ========================================== -->
     <section id="screen-skills" class="screen">
       <div class="screen-header">
-        <span class="screen-badge">Step 1 of 4</span>
+        <span class="screen-badge">Step 1 of 3</span>
         <h2>Choose Your Assessment Track</h2>
         <p>Select the technology you want to benchmark today. Luminex will evaluate your strengths and pinpoint your weak spots.</p>
       </div>
@@ -321,7 +321,7 @@
     <section id="screen-learning" class="screen">
       <div class="learning-container">
         <div class="screen-header">
-          <span class="screen-badge">Step 3 of 4</span>
+          <span class="screen-badge">Step 3 of 3</span>
           <h2>Recommended for You</h2>
           <p>Curated, bite-sized learning materials personalized for your gap in <strong id="learning-topic-name">Recursion</strong>.</p>
         </div>
@@ -331,17 +331,7 @@
           <!-- Rendered dynamically by script.js -->
         </div>
 
-        <!-- Prompt to Retake Quiz -->
-        <div class="retake-cta-card">
-          <div class="cta-text">
-            <h3>Ready to prove your improvement?</h3>
-            <p>Take a short 5-question targeted quiz focusing strictly on your weak area to measure how much you have grown.</p>
-          </div>
-          <button class="btn btn-accent btn-lg" id="btn-start-retake" onclick="startTargetedRetake()">
-            Take Quiz Again 🚀
-          </button>
-        </div>
-      </div>
+
     </section>
 
 
@@ -480,31 +470,33 @@
         </div>
 
         <!-- Top Metric Stat Cards -->
-        <div class="stats-overview-grid">
-          <div class="stat-card">
-            <span class="stat-title">Active Skill Track</span>
-            <div class="stat-value" id="dash-skill-name">Python</div>
-            <span class="stat-sub">Benchmarked technology</span>
-          </div>
+    <div class="stats-overview-grid">
 
-          <div class="stat-card">
-            <span class="stat-title">Overall Score</span>
-            <div class="stat-value highlight" id="dash-overall-score">72%</div>
-            <span class="stat-sub" id="dash-overall-status">Solid Proficiency</span>
-          </div>
+      <div class="stat-card">
+        <span class="stat-title">Active Skill Track</span>
+        <div class="stat-value" id="dash-skill-name">Python</div>
+        <span class="stat-sub">Benchmarked technology</span>
+      </div>
 
-          <div class="stat-card">
-            <span class="stat-title">Quizzes Completed</span>
-            <div class="stat-value" id="dash-quizzes-completed">2</div>
-            <span class="stat-sub">Assessments & retakes</span>
-          </div>
+      <div class="stat-card">
+        <span class="stat-title">Overall Score</span>
+        <div class="stat-value highlight" id="dash-overall-score">0%</div>
+        <span class="stat-sub" id="dash-overall-status">No assessment yet</span>
+      </div>
 
-          <div class="stat-card">
-            <span class="stat-title">Verified Improvement</span>
-            <div class="stat-value green-text" id="dash-improvement-stat">+45%</div>
-            <span class="stat-sub" id="dash-improved-topic">Recursion</span>
-          </div>
-        </div>
+      <div class="stat-card">
+        <span class="stat-title">Assessments Completed</span>
+        <div class="stat-value" id="dash-quizzes-completed">0</div>
+        <span class="stat-sub">Completed assessments</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-title">Competency Gaps</span>
+        <div class="stat-value" id="dash-gap-stat">0</div>
+        <span class="stat-sub">Areas to improve</span>
+      </div>
+
+    </div>
 
         <!-- Detailed Breakdown Grid -->
         <div class="dash-details-grid">
@@ -512,7 +504,7 @@
           <div class="dash-card">
             <div class="card-header-flex">
               <h3>Competency Gaps Status</h3>
-              <span class="chip-count" id="dash-gap-count">1 Identified</span>
+              <span class="chip-count" id="dash-gap-count">0 Identified</span>
             </div>
             <div class="gaps-list" id="dash-gaps-list">
               <!-- Rendered dynamically -->
@@ -523,7 +515,7 @@
           <div class="dash-card">
             <div class="card-header-flex">
               <h3>Improvement Journey</h3>
-              <span class="chip-count green-chip" id="dash-resolved-count">1 Closed</span>
+              <span class="chip-count green-chip" id="dash-resolved-count">0 Closed</span>
             </div>
             <div class="history-list" id="dash-history-list">
               <!-- Rendered dynamically -->
@@ -551,7 +543,6 @@
   <footer class="app-footer">
     <div class="footer-container">
       <p><strong>Luminex</strong> &bull; SkillGap AI &bull; Built with Vanilla HTML, CSS & JavaScript</p>
-      <p class="footer-sub">Hackathon Ready &bull; Modular API Integration Architecture</p>
     </div>
   </footer>
 

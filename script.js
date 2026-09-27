@@ -18,7 +18,7 @@ const appState = {
   // Scoring & Diagnostics
   initialScorePercent: 0,             // e.g., 65
   topicScores: {},                    // e.g., { "Basics": 80, "Recursion": 30 }
-  weakestTopic: "Recursion",          // Name of the lowest scoring topic
+  weakestTopic: null,          // Name of the lowest scoring topic
   
   // Targeted Retake & Improvement
   retakeScorePercent: 0,              // e.g., 75
@@ -396,6 +396,113 @@ const learningResourcesData = {
       url: "https://www.freecodecamp.org/news/how-recursion-works-explained-with-flowcharts-and-a-video-de61f40cb7f9/"
     }
   ],
+  "HTML/CSS": [
+  {
+    title: "HTML & CSS Fundamentals",
+    type: "video",
+    badge: "Video Tutorial",
+    description: "Learn semantic HTML, CSS selectors, box model, layouts, and responsive design.",
+    actionText: "Watch Now",
+    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content"
+  },
+  {
+    title: "CSS Layout Practice",
+    type: "practice",
+    badge: "Hands-on Practice",
+    description: "Practice Flexbox, Grid, spacing, alignment, and responsive layouts.",
+    actionText: "Practice Now",
+    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout"
+  },
+  {
+    title: "HTML & CSS Reference",
+    type: "guide",
+    badge: "Quick Reference",
+    description: "Review HTML elements, CSS properties, selectors, and layout concepts.",
+    actionText: "Review Guide",
+    url: "https://developer.mozilla.org/en-US/docs/Web"
+  }
+],
+
+"DOM Manipulation": [
+  {
+    title: "DOM Introduction",
+    type: "video",
+    badge: "Video Tutorial",
+    description: "Understand how JavaScript interacts with HTML elements through the DOM.",
+    actionText: "Watch Now",
+    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction"
+  },
+  {
+    title: "DOM Manipulation Practice",
+    type: "practice",
+    badge: "Hands-on Practice",
+    description: "Practice selecting, modifying, creating, and removing DOM elements.",
+    actionText: "Practice Now",
+    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document"
+  },
+  {
+    title: "DOM API Reference",
+    type: "guide",
+    badge: "Quick Reference",
+    description: "Reference common DOM methods and properties used in JavaScript.",
+    actionText: "Review Guide",
+    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document"
+  }
+],
+
+"Async JS": [
+  {
+    title: "JavaScript Promises & Async/Await",
+    type: "video",
+    badge: "Video Tutorial",
+    description: "Understand Promises, async functions, await, and asynchronous JavaScript.",
+    actionText: "Watch Now",
+    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS"
+  },
+  {
+    title: "Async JavaScript Practice",
+    type: "practice",
+    badge: "Hands-on Practice",
+    description: "Practice working with Promises and asynchronous operations.",
+    actionText: "Practice Now",
+    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
+  },
+  {
+    title: "Async JavaScript Reference",
+    type: "guide",
+    badge: "Quick Reference",
+    description: "Review Promise, async, await, and asynchronous execution concepts.",
+    actionText: "Review Guide",
+    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"
+  }
+],
+
+"Events": [
+  {
+    title: "JavaScript Events",
+    type: "video",
+    badge: "Video Tutorial",
+    description: "Learn how browser events work and how JavaScript responds to user interactions.",
+    actionText: "Watch Now",
+    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events"
+  },
+  {
+    title: "Event Handling Practice",
+    type: "practice",
+    badge: "Hands-on Practice",
+    description: "Practice click, input, submit, and other event handlers.",
+    actionText: "Practice Now",
+    url: "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener"
+  },
+  {
+    title: "Event Reference",
+    type: "guide",
+    badge: "Quick Reference",
+    description: "Review event types and event listener methods.",
+    actionText: "Review Guide",
+    url: "https://developer.mozilla.org/en-US/docs/Web/Events"
+  }
+],
 
   Default: [
     {
@@ -444,14 +551,21 @@ document.addEventListener("DOMContentLoaded", () => {
  */
 function navigateTo(screenName) {
   const screens = document.querySelectorAll(".screen");
+
   screens.forEach((screen) => {
     screen.classList.remove("active");
   });
 
   const targetScreen = document.getElementById(`screen-${screenName}`);
+
   if (targetScreen) {
     targetScreen.classList.add("active");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // Refresh dashboard with the latest assessment data
+  if (screenName === "dashboard") {
+    renderDashboard();
   }
 }
 
@@ -504,9 +618,13 @@ function restartApp() {
   appState.currentQuestionIndex = 0;
   appState.userAnswers = {};
   appState.topicScores = {};
+  appState.weakestTopic = null;
+  
   appState.initialScorePercent = 0;
   appState.retakeScorePercent = 0;
   appState.improvementPercent = 0;
+  appState.quizzesCompleted = 0;
+  appState.history = [];
   appState.currentQuizType = "initial";
   
   renderSkillCards();
@@ -742,8 +860,12 @@ function findWeakestTopic(topicScores) {
     }
   }
 
-  // Fallback to Recursion if nothing found
-  return weakest || "Recursion";
+  // A competency gap only exists below 70%
+  if (lowestScore >= 70) {
+    return null;
+  }
+
+  return weakest;
 }
 
 
@@ -757,68 +879,205 @@ function findWeakestTopic(topicScores) {
 function showResults() {
   const overall = appState.initialScorePercent;
   const weakest = appState.weakestTopic;
-  const weakestScore = appState.topicScores[weakest] ?? 30;
 
+  const weakestScore =
+    weakest !== null && weakest !== undefined
+      ? appState.topicScores[weakest]
+      : null;
+
+  const hasGap =
+    weakest !== null &&
+    weakest !== undefined &&
+    weakestScore < 70;
+
+
+  // --------------------------------------------------
   // 1. Overall Score Display
-  document.getElementById("result-overall-score").textContent = `${overall}%`;
+  // --------------------------------------------------
 
-  const titleEl = document.getElementById("result-score-title");
-  const descEl = document.getElementById("result-score-description");
+  document.getElementById("result-overall-score").textContent =
+    `${overall}%`;
 
-  if (overall >= 75) {
-    titleEl.textContent = "Strong Performance Overall";
-    descEl.textContent = "You demonstrated strong conceptual foundations, with just a few specific knowledge gaps to iron out.";
+  const titleEl =
+    document.getElementById("result-score-title");
+
+  const descEl =
+    document.getElementById("result-score-description");
+
+
+  if (!hasGap) {
+
+    titleEl.textContent =
+      "Excellent Performance!";
+
+    descEl.textContent =
+      "You demonstrated strong proficiency across all assessed topics. No major competency gaps were detected.";
+
+  } else if (overall >= 75) {
+
+    titleEl.textContent =
+      "Strong Performance Overall";
+
+    descEl.textContent =
+      "You demonstrated strong conceptual foundations, with a few specific areas that could benefit from additional practice.";
+
   } else if (overall >= 50) {
-    titleEl.textContent = "Good Baseline with Critical Gaps";
-    descEl.textContent = "You have solid foundational knowledge, but targeted improvement in key areas is needed to level up.";
+
+    titleEl.textContent =
+      "Good Baseline with Some Gaps";
+
+    descEl.textContent =
+      "You have a reasonable foundation, but targeted learning can help strengthen weaker areas.";
+
   } else {
-    titleEl.textContent = "Foundational Knowledge Needed";
-    descEl.textContent = "Key conceptual gaps were identified. Review the recommended resources before retaking your assessment.";
+
+    titleEl.textContent =
+      "Foundational Knowledge Needed";
+
+    descEl.textContent =
+      "Several competency gaps were identified. Review the recommended learning resources for the weaker areas.";
   }
 
-  // 2. Topic-wise Performance Rows
-  const topicsList = document.getElementById("result-topics-list");
+
+  // --------------------------------------------------
+  // 2. Topic-wise Performance
+  // --------------------------------------------------
+
+  const topicsList =
+    document.getElementById("result-topics-list");
+
   topicsList.innerHTML = "";
 
   for (const topic in appState.topicScores) {
-    const score = appState.topicScores[topic];
 
-    // Determine status color and indicator
-    // Strong: >=70% 🟢 | Average: 50-69% 🟡 | Weak: <50% 🔴
+    const score =
+      appState.topicScores[topic];
+
     let statusClass = "green";
     let badgeEmoji = "🟢";
 
     if (score < 50) {
+
       statusClass = "red";
       badgeEmoji = "🔴";
+
     } else if (score < 70) {
+
       statusClass = "yellow";
       badgeEmoji = "🟡";
     }
 
-    const row = document.createElement("div");
+
+    const row =
+      document.createElement("div");
+
     row.className = "topic-row";
+
     row.innerHTML = `
-      <div class="topic-row-info">${topic}</div>
+      <div class="topic-row-info">
+        ${topic}
+      </div>
+
       <div class="topic-row-bar">
         <div class="progress-bar-wrapper">
-          <div class="progress-bar-fill ${statusClass}" style="width: ${score}%;"></div>
+          <div
+            class="progress-bar-fill ${statusClass}"
+            style="width: ${score}%;">
+          </div>
         </div>
       </div>
-      <div class="topic-row-score">${score}%</div>
-      <div class="topic-row-badge" title="${statusClass.toUpperCase()}">${badgeEmoji}</div>
+
+      <div class="topic-row-score">
+        ${score}%
+      </div>
+
+      <div
+        class="topic-row-badge"
+        title="${statusClass.toUpperCase()}">
+        ${badgeEmoji}
+      </div>
     `;
 
     topicsList.appendChild(row);
   }
 
-  // 3. Highlight weakest topic banner
-  document.getElementById("result-weak-summary").innerHTML = 
-    `We found that <strong>${weakest}</strong> is currently your weakest area (<strong>${weakestScore}% proficiency</strong>).`;
 
-  // Preload Competency Gap & Learning recommendations
-  loadCompetencyGap(weakest, weakestScore);
-  loadLearningResources(weakest);
+  // --------------------------------------------------
+  // 3. Competency Gap Banner
+  // --------------------------------------------------
+
+  const weakBanner =
+    document.getElementById("result-weak-banner");
+
+  const weakSummary =
+    document.getElementById("result-weak-summary");
+
+
+  if (hasGap) {
+
+    weakBanner.style.display = "flex";
+
+    weakSummary.innerHTML =
+      `We found that <strong>${weakest}</strong> is currently your weakest area (<strong>${weakestScore}% proficiency</strong>).`;
+
+  } else {
+
+    weakBanner.style.display = "flex";
+
+    weakBanner.querySelector("h4").textContent =
+      "No Competency Gaps Detected";
+
+    weakBanner.querySelector(".weak-callout-icon").textContent =
+      "✓";
+
+    weakSummary.innerHTML =
+      "You achieved <strong>70% or above</strong> across all assessed topics. Keep building on your current knowledge.";
+  }
+
+
+  // --------------------------------------------------
+  // 4. Inspect Competency Gap Button
+  // --------------------------------------------------
+
+  const inspectButton =
+    weakBanner.nextElementSibling?.querySelector("button");
+
+
+  if (inspectButton) {
+
+    if (hasGap) {
+
+      inspectButton.style.display =
+        "inline-flex";
+
+      inspectButton.innerHTML = `
+        Inspect Competency Gap
+        <span class="btn-arrow">→</span>
+      `;
+
+    } else {
+
+      inspectButton.style.display =
+        "none";
+    }
+  }
+
+
+  // --------------------------------------------------
+  // 5. Only load Gap + Learning when a gap exists
+  // --------------------------------------------------
+
+  if (hasGap) {
+
+    loadCompetencyGap(
+      weakest,
+      weakestScore
+    );
+
+    loadLearningResources(
+      weakest
+    );
+  }
 }
 
 /**
@@ -842,9 +1101,51 @@ function loadCompetencyGap(topic, proficiency) {
     explanationEl.textContent = `You have partial familiarity with ${topic} (${proficiency}%), but lack consistency on edge-case behavior and advanced patterns.`;
     actionEl.textContent = `Review 2-3 code walkthroughs focusing specifically on boundary cases, then test your understanding.`;
   } else {
-    levelTag.textContent = "Minor Gap";
-    explanationEl.textContent = `Your ${topic} mastery is relatively strong (${proficiency}%), with only minor syntax or optimization nuances missed.`;
-    actionEl.textContent = `Quickly scan the cheat sheet and take the targeted retake to push this skill to 100%.`;
+    function loadCompetencyGap(topic, proficiency) {
+
+  document.getElementById("gap-topic-name").textContent =
+    topic;
+
+  document.getElementById("gap-proficiency").textContent =
+    `${proficiency}%`;
+
+  document.getElementById("gap-meter-fill").style.width =
+    `${proficiency}%`;
+
+
+  const levelTag =
+    document.getElementById("gap-level-tag");
+
+  const explanationEl =
+    document.getElementById("gap-explanation-text");
+
+  const actionEl =
+    document.getElementById("gap-recommended-action");
+
+
+  if (proficiency < 40) {
+
+    levelTag.textContent =
+      "Critical Competency Gap";
+
+    explanationEl.textContent =
+      `You scored ${proficiency}% in ${topic}. This indicates that the fundamentals need significant reinforcement.`;
+
+    actionEl.textContent =
+      `Focus on ${topic} fundamentals, work through beginner-level examples, and use the recommended learning resources to strengthen your understanding.`;
+
+  } else if (proficiency < 70) {
+
+    levelTag.textContent =
+      "Moderate Competency Gap";
+
+    explanationEl.textContent =
+      `You have partial familiarity with ${topic} (${proficiency}%), but some concepts need additional practice and reinforcement.`;
+
+    actionEl.textContent =
+      `Review the recommended learning materials and practice the weaker concepts before moving to more advanced problems.`;
+  }
+}
   }
 }
 
@@ -866,7 +1167,9 @@ function loadLearningResources(topic) {
   grid.innerHTML = "";
 
   // Get resources for this topic or fall back to general curated list
-  const resources = learningResourcesData[topic] || learningResourcesData.Recursion || learningResourcesData.Default;
+ const resources =
+  learningResourcesData[topic] ||
+  learningResourcesData.Default;
 
   resources.forEach((res) => {
     const card = document.createElement("div");
@@ -1116,78 +1419,202 @@ function showImprovementScreen(topic, beforeScore, afterScore, delta) {
  * Populates the overall student dashboard.
  */
 function renderDashboard() {
-  const currentSkillObj = skillsData.find(s => s.id === appState.selectedSkillId) || skillsData[0];
-  const initialOverall = appState.initialScorePercent || 72;
-  const weakestTopic = appState.weakestTopic || "Recursion";
-  const retakeScore = appState.retakeScorePercent || 75;
-  const improvement = appState.improvementPercent || 45;
+  const currentSkillObj =
+    skillsData.find(s => s.id === appState.selectedSkillId) ||
+    skillsData[0];
 
-  // 1. Top Stat Cards
-  document.getElementById("dash-skill-name").textContent = currentSkillObj.name;
-  
-  // Calculate weighted or updated score for display
-  const updatedScore = Math.max(initialOverall, Math.round((initialOverall + retakeScore) / 2));
-  document.getElementById("dash-overall-score").textContent = `${updatedScore}%`;
-  
-  document.getElementById("dash-quizzes-completed").textContent = appState.quizzesCompleted || 2;
-  
-  const sign = improvement >= 0 ? "+" : "";
-  document.getElementById("dash-improvement-stat").textContent = `${sign}${improvement}%`;
-  document.getElementById("dash-improved-topic").textContent = `${weakestTopic} improved`;
+  const score = appState.initialScorePercent;
+  const topicScores = appState.topicScores || {};
 
-  // 2. Competency Gaps List
-  const gapsList = document.getElementById("dash-gaps-list");
+  // --------------------------------------------------
+  // 1. Active Skill
+  // --------------------------------------------------
+
+  document.getElementById("dash-skill-name").textContent =
+    currentSkillObj.name;
+
+
+  // --------------------------------------------------
+  // 2. Overall Score
+  // --------------------------------------------------
+
+  document.getElementById("dash-overall-score").textContent =
+    `${score}%`;
+
+  const overallStatus =
+    document.getElementById("dash-overall-status");
+
+  if (appState.quizzesCompleted === 0) {
+    overallStatus.textContent = "No assessment yet";
+  } else if (score >= 70) {
+    overallStatus.textContent = "Strong Proficiency";
+  } else if (score >= 50) {
+    overallStatus.textContent = "Developing Proficiency";
+  } else {
+    overallStatus.textContent = "Needs Improvement";
+  }
+
+
+  // --------------------------------------------------
+  // 3. Assessments Completed
+  // --------------------------------------------------
+
+  document.getElementById("dash-quizzes-completed").textContent =
+    appState.quizzesCompleted;
+
+
+  // --------------------------------------------------
+  // 4. Competency Gaps
+  // --------------------------------------------------
+
+  const gapsList =
+    document.getElementById("dash-gaps-list");
+
+  const gapCount =
+    document.getElementById("dash-gap-count");
+
+  const gapStat =
+    document.getElementById("dash-gap-stat");
+
   gapsList.innerHTML = "";
 
-  // Weakest topic row
-  const gapRow = document.createElement("div");
-  gapRow.className = "dash-item";
-  gapRow.innerHTML = `
-    <span class="dash-item-title">⚠ ${weakestTopic}</span>
-    <span class="dash-item-badge" style="color: var(--status-strong);">
-      ${appState.retakeScorePercent > 0 ? "Retaken & Resolved ✓" : "Identified (Pending Retake)"}
-    </span>
-  `;
-  gapsList.appendChild(gapRow);
+  let identifiedGaps = 0;
 
-  // Additional secondary gap if exists
-  for (const topic in appState.topicScores) {
-    if (topic !== weakestTopic && appState.topicScores[topic] < 65) {
-      const secRow = document.createElement("div");
-      secRow.className = "dash-item";
-      secRow.innerHTML = `
-        <span class="dash-item-title">🔍 ${topic}</span>
-        <span class="dash-item-badge" style="color: var(--status-average);">${appState.topicScores[topic]}% (Moderate)</span>
+  if (appState.quizzesCompleted === 0) {
+
+    gapCount.textContent = "0 Identified";
+    gapStat.textContent = "0";
+
+    gapsList.innerHTML = `
+      <div class="dash-item">
+        <span class="dash-item-title">
+          No competency gaps yet
+        </span>
+
+        <span class="dash-item-badge">
+          Complete an assessment
+        </span>
+      </div>
+    `;
+
+  } else {
+
+    for (const topic in topicScores) {
+
+      if (topicScores[topic] < 65) {
+
+        identifiedGaps++;
+
+        const gapRow =
+          document.createElement("div");
+
+        gapRow.className = "dash-item";
+
+        gapRow.innerHTML = `
+          <span class="dash-item-title">
+            ⚠ ${topic}
+          </span>
+
+          <span
+            class="dash-item-badge"
+            style="color: var(--status-average);"
+          >
+            ${topicScores[topic]}%
+          </span>
+        `;
+
+        gapsList.appendChild(gapRow);
+      }
+    }
+
+    gapCount.textContent =
+      `${identifiedGaps} Identified`;
+
+    gapStat.textContent =
+      identifiedGaps;
+
+    if (identifiedGaps === 0) {
+
+      gapsList.innerHTML = `
+        <div class="dash-item">
+          <span class="dash-item-title">
+            ✓ No major competency gaps
+          </span>
+
+          <span class="dash-item-badge">
+            Strong performance
+          </span>
+        </div>
       `;
-      gapsList.appendChild(secRow);
     }
   }
 
-  // 3. Improvement Journey / History
-  const historyList = document.getElementById("dash-history-list");
+
+  // --------------------------------------------------
+  // 5. Assessment Summary
+  // --------------------------------------------------
+
+  const historyList =
+    document.getElementById("dash-history-list");
+
+  const summaryCount =
+    document.getElementById("dash-summary-count");
+
   historyList.innerHTML = "";
 
-  if (appState.history.length === 0) {
-    // Default mock history for demo presentation
+  if (appState.quizzesCompleted === 0) {
+
+    summaryCount.textContent = "0 Topics";
+
     historyList.innerHTML = `
       <div class="dash-item">
-        <span class="dash-item-title">${weakestTopic}: Initial Assessment</span>
-        <span class="dash-item-badge" style="color: var(--status-weak);">${appState.topicScores[weakestTopic] ?? 30}%</span>
-      </div>
-      <div class="dash-item">
-        <span class="dash-item-title">${weakestTopic}: Targeted Retake</span>
-        <span class="dash-item-badge" style="color: var(--status-strong);">+${improvement}% Growth</span>
+        <span class="dash-item-title">
+          No assessment data yet
+        </span>
+
+        <span class="dash-item-badge">
+          Complete an assessment to view results
+        </span>
       </div>
     `;
+
   } else {
-    appState.history.forEach(item => {
-      const histRow = document.createElement("div");
-      histRow.className = "dash-item";
-      histRow.innerHTML = `
-        <span class="dash-item-title">${item.topic} Retake (${item.timestamp})</span>
-        <span class="dash-item-badge" style="color: var(--status-strong);">${item.before}% ➔ ${item.after}% (+${item.diff}%)</span>
+
+    const topics =
+      Object.keys(topicScores);
+
+    summaryCount.textContent =
+      `${topics.length} Topics`;
+
+    topics.forEach(topic => {
+
+      const score =
+        topicScores[topic];
+
+      const summaryRow =
+        document.createElement("div");
+
+      summaryRow.className = "dash-item";
+
+      let label = "Needs Improvement";
+
+      if (score >= 70) {
+        label = "Strong";
+      } else if (score >= 50) {
+        label = "Developing";
+      }
+
+      summaryRow.innerHTML = `
+        <span class="dash-item-title">
+          ${topic}
+        </span>
+
+        <span class="dash-item-badge">
+          ${score}% · ${label}
+        </span>
       `;
-      historyList.appendChild(histRow);
+
+      historyList.appendChild(summaryRow);
     });
   }
 }
