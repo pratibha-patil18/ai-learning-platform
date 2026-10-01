@@ -526,7 +526,7 @@ body {
 }
 
 /* ==========================================================================
-   SCREEN 3 & 7: Quiz Containers (Initial & Retake)
+   SCREEN 3 : Quiz Containers
    ========================================================================== */
 .quiz-container {
   max-width: 680px;
@@ -603,16 +603,6 @@ body {
   background: var(--status-weak);
 }
 
-.retake-info-banner {
-  background: var(--accent-purple-light);
-  border: 1px solid #DDD6FE;
-  color: #5B21B6;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.6rem 1rem;
-  border-radius: var(--radius-md);
-  margin-bottom: 1rem;
-}
 
 /* Question Card */
 .question-card {
@@ -1067,17 +1057,6 @@ body {
   flex: 1;
 }
 
-.retake-cta-card {
-  background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);
-  border-radius: var(--radius-lg);
-  padding: 2.25rem;
-  color: #FFF;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  box-shadow: var(--shadow-lg);
-}
 
 .cta-text h3 {
   font-size: 1.35rem;
@@ -1091,160 +1070,6 @@ body {
   max-width: 480px;
 }
 
-/* ==========================================================================
-   SCREEN 8: Improvement Before / After
-   ========================================================================== */
-.improvement-container {
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.improvement-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
-  box-shadow: var(--shadow-lg);
-}
-
-.celebration-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.celebration-icon {
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.celebration-header h3 {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--text-main);
-  margin-bottom: 0.3rem;
-}
-
-.celebration-header p {
-  font-size: 1.05rem;
-  color: var(--text-secondary);
-}
-
-.comparison-grid {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.comp-box {
-  flex: 1;
-  background: var(--bg-muted);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.comp-box.before-box {
-  border-color: var(--status-weak-border);
-  background: #FFF5F5;
-}
-
-.comp-box.after-box {
-  border-color: var(--status-strong-border);
-  background: #F0FDF4;
-}
-
-.comp-tag {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--status-weak);
-  margin-bottom: 0.4rem;
-  display: block;
-}
-
-.comp-tag.green-tag {
-  color: var(--status-strong);
-}
-
-.comp-topic {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
-}
-
-.comp-score-val {
-  font-size: 2.5rem;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 0.75rem;
-}
-
-.red-text { color: var(--status-weak); }
-.green-text { color: var(--status-strong); }
-
-.comp-caption {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-top: 0.5rem;
-  display: block;
-}
-
-.comp-arrow-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.5rem;
-}
-
-.delta-badge {
-  background: var(--status-strong);
-  color: #FFF;
-  font-size: 1rem;
-  font-weight: 800;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-  margin-bottom: 0.4rem;
-}
-
-.arrow-symbol {
-  font-size: 1.5rem;
-  color: var(--text-muted);
-}
-
-.growth-metric-banner {
-  background: var(--status-strong-bg);
-  border: 1px solid var(--status-strong-border);
-  border-radius: var(--radius-md);
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.metric-icon {
-  font-size: 1.75rem;
-}
-
-.metric-info h4 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #065F46;
-  margin-bottom: 0.2rem;
-}
-
-.metric-info p {
-  font-size: 0.9rem;
-  color: #047857;
-}
 
 /* ==========================================================================
    SCREEN 9: Dashboard
@@ -1413,10 +1238,7 @@ body {
     margin: 0.5rem 0;
   }
 
-  .retake-cta-card {
-    flex-direction: column;
-    text-align: center;
-  }
+ 
 
   .screen-actions {
     flex-direction: column;
@@ -1436,3 +1258,4 @@ body {
     font-size: 0.8rem;
   }
 }
+

@@ -10,7 +10,6 @@
 // ==========================================================================
 const appState = {
   selectedSkillId: "python",          // ID of currently selected skill
-  currentQuizType: "initial",         // "initial" or "retake"
   currentQuestionIndex: 0,            // Which question the user is answering
   questions: [],                      // Active list of question objects
   userAnswers: {},                    // Stores questionIndex -> selectedOptionIndex
@@ -20,9 +19,6 @@ const appState = {
   topicScores: {},                    // e.g., { "Basics": 80, "Recursion": 30 }
   weakestTopic: null,          // Name of the lowest scoring topic
   
-  // Targeted Retake & Improvement
-  retakeScorePercent: 0,              // e.g., 75
-  improvementPercent: 0,              // e.g., +45
   
   // Dashboard Metrics
   quizzesCompleted: 0,
@@ -267,267 +263,171 @@ const questionsData = {
   ]
 };
 
-// ==========================================================================
-// 4. MOCK DATA: TARGETED RETAKE QUESTIONS
-// Specifically for weak topics (e.g. 5 focused questions on Recursion, OOP, etc.)
-// ==========================================================================
-const retakeQuestionsData = {
-  Recursion: [
-    {
-      question: "Targeted Retake 1: What happens if a recursive function does not reach its base case?",
-      options: [
-        "It returns 0 automatically",
-        "It leads to infinite recursion and a Stack Overflow error",
-        "The compiler optimizes it into a while loop",
-        "It converts into an asynchronous promise"
-      ],
-      answer: 1,
-      topic: "Recursion"
-    },
-    {
-      question: "Targeted Retake 2: In the classic recursive Fibonacci definition fib(n) = fib(n-1) + fib(n-2), what are the base cases?",
-      options: [
-        "n == 10",
-        "n == 0 and n == 1",
-        "n < 0 only",
-        "fibonacci has no base cases"
-      ],
-      answer: 1,
-      topic: "Recursion"
-    },
-    {
-      question: "Targeted Retake 3: What is the main characteristic of 'Tail Recursion'?",
-      options: [
-        "The recursive call is the very last operation executed in the function",
-        "It uses a queue instead of a stack",
-        "It must run inside a loop",
-        "It only works on arrays"
-      ],
-      answer: 0,
-      topic: "Recursion"
-    },
-    {
-      question: "Targeted Retake 4: Why does memoization dramatically speed up naive recursive algorithms like Fibonacci?",
-      options: [
-        "It eliminates function arguments",
-        "It caches previously computed subproblem results to avoid redundant calculations",
-        "It converts Python into C++ code",
-        "It increases the CPU clock speed"
-      ],
-      answer: 1,
-      topic: "Recursion"
-    },
-    {
-      question: "Targeted Retake 5: In recursive problem solving, what is the 'unwinding' or 'backtracking' phase?",
-      options: [
-        "Restarting the function from line 1",
-        "Popping frames off the call stack and returning values up to the caller",
-        "Clearing all variables in memory",
-        "Throwing a runtime exception"
-      ],
-      answer: 1,
-      topic: "Recursion"
-    }
-  ],
-
-  // Fallback targeted questions for other topics if diagnosed as weakest
-  General: [
-    {
-      question: "Diagnostic Check 1: What is the primary purpose of breaking problems into smaller subproblems?",
-      options: ["Increase memory usage", "Simplify logic and enhance readability", "Bypass syntax rules", "Create more files"],
-      answer: 1,
-      topic: "Fundamentals"
-    },
-    {
-      question: "Diagnostic Check 2: Which principle ensures code can be reused without duplication?",
-      options: ["DRY (Don't Repeat Yourself)", "WET (Write Everything Twice)", "Brute Force", "Hardcoding"],
-      answer: 0,
-      topic: "Fundamentals"
-    },
-    {
-      question: "Diagnostic Check 3: What is time complexity used for in computer science?",
-      options: ["Measuring how long a file compiles", "Describing how runtime scales relative to input size", "Checking clock frequency", "Counting code lines"],
-      answer: 1,
-      topic: "Fundamentals"
-    },
-    {
-      question: "Diagnostic Check 4: When debugging an issue, what is the best initial step?",
-      options: ["Delete all code", "Isolate input conditions and inspect error messages/logs", "Restart the operating system", "Guess the bug"],
-      answer: 1,
-      topic: "Fundamentals"
-    },
-    {
-      question: "Diagnostic Check 5: What is the main benefit of writing modular, single-responsibility functions?",
-      options: ["They execute faster on GPU", "They are significantly easier to test, debug, and maintain", "They prevent git commits", "They take no memory"],
-      answer: 1,
-      topic: "Fundamentals"
-    }
-  ]
-};
 
 // ==========================================================================
 // 5. MOCK DATA: RECOMMENDED LEARNING RESOURCES
 // Structured so an API endpoint can supply dynamic links later.
 // ==========================================================================
 const learningResourcesData = {
-  Recursion: [
+  "Recursion": [
     {
-      title: "Recursion in 100 Seconds & Visual Guide",
+      title: "Recursion in 100 Seconds",
       type: "video",
       badge: "Video Tutorial",
-      description: "A fast, beginner-friendly visualization of call stacks, base cases, and tree recursion by Fireship.",
+      description: "A quick visual introduction to recursion, recursive calls, and the call stack.",
       actionText: "Watch Now",
       url: "https://www.youtube.com/watch?v=rf60MejMz3E"
     },
     {
-      title: "Interactive Base-Case & Recursion Drills",
+      title: "Recursion Practice",
       type: "practice",
       badge: "Hands-on Practice",
-      description: "Bite-sized challenges to trace recursive calls step-by-step and write bulletproof base conditions.",
+      description: "Practice recursion problems and strengthen your understanding of base cases and recursive calls.",
       actionText: "Practice Now",
       url: "https://leetcode.com/explore/learn/card/recursion-i/"
     },
     {
-      title: "Recursion & Call Stack Cheatsheet",
+      title: "How Recursion Works",
       type: "guide",
       badge: "Quick Reference",
-      description: "Key mental models: base cases, recursive transitions, call stack diagrams, and avoiding stack overflows.",
+      description: "Review recursion, call stacks, base cases, and recursive execution with visual explanations.",
       actionText: "Review Guide",
       url: "https://www.freecodecamp.org/news/how-recursion-works-explained-with-flowcharts-and-a-video-de61f40cb7f9/"
     }
   ],
+
   "HTML/CSS": [
-  {
-    title: "HTML & CSS Fundamentals",
-    type: "video",
-    badge: "Video Tutorial",
-    description: "Learn semantic HTML, CSS selectors, box model, layouts, and responsive design.",
-    actionText: "Watch Now",
-    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content"
-  },
-  {
-    title: "CSS Layout Practice",
-    type: "practice",
-    badge: "Hands-on Practice",
-    description: "Practice Flexbox, Grid, spacing, alignment, and responsive layouts.",
-    actionText: "Practice Now",
-    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout"
-  },
-  {
-    title: "HTML & CSS Reference",
-    type: "guide",
-    badge: "Quick Reference",
-    description: "Review HTML elements, CSS properties, selectors, and layout concepts.",
-    actionText: "Review Guide",
-    url: "https://developer.mozilla.org/en-US/docs/Web"
-  }
-],
-
-"DOM Manipulation": [
-  {
-    title: "DOM Introduction",
-    type: "video",
-    badge: "Video Tutorial",
-    description: "Understand how JavaScript interacts with HTML elements through the DOM.",
-    actionText: "Watch Now",
-    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction"
-  },
-  {
-    title: "DOM Manipulation Practice",
-    type: "practice",
-    badge: "Hands-on Practice",
-    description: "Practice selecting, modifying, creating, and removing DOM elements.",
-    actionText: "Practice Now",
-    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document"
-  },
-  {
-    title: "DOM API Reference",
-    type: "guide",
-    badge: "Quick Reference",
-    description: "Reference common DOM methods and properties used in JavaScript.",
-    actionText: "Review Guide",
-    url: "https://developer.mozilla.org/en-US/docs/Web/API/Document"
-  }
-],
-
-"Async JS": [
-  {
-    title: "JavaScript Promises & Async/Await",
-    type: "video",
-    badge: "Video Tutorial",
-    description: "Understand Promises, async functions, await, and asynchronous JavaScript.",
-    actionText: "Watch Now",
-    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS"
-  },
-  {
-    title: "Async JavaScript Practice",
-    type: "practice",
-    badge: "Hands-on Practice",
-    description: "Practice working with Promises and asynchronous operations.",
-    actionText: "Practice Now",
-    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
-  },
-  {
-    title: "Async JavaScript Reference",
-    type: "guide",
-    badge: "Quick Reference",
-    description: "Review Promise, async, await, and asynchronous execution concepts.",
-    actionText: "Review Guide",
-    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function"
-  }
-],
-
-"Events": [
-  {
-    title: "JavaScript Events",
-    type: "video",
-    badge: "Video Tutorial",
-    description: "Learn how browser events work and how JavaScript responds to user interactions.",
-    actionText: "Watch Now",
-    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events"
-  },
-  {
-    title: "Event Handling Practice",
-    type: "practice",
-    badge: "Hands-on Practice",
-    description: "Practice click, input, submit, and other event handlers.",
-    actionText: "Practice Now",
-    url: "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener"
-  },
-  {
-    title: "Event Reference",
-    type: "guide",
-    badge: "Quick Reference",
-    description: "Review event types and event listener methods.",
-    actionText: "Review Guide",
-    url: "https://developer.mozilla.org/en-US/docs/Web/Events"
-  }
-],
-
-  Default: [
     {
-      title: "Core Fundamentals Masterclass",
+      title: "HTML & CSS Full Course for Beginners",
       type: "video",
       badge: "Video Tutorial",
-      description: "Comprehensive step-by-step explanation covering underlying logic, common pitfalls, and best practices.",
+      description: "Learn HTML and CSS fundamentals, layouts, styling, and responsive design.",
       actionText: "Watch Now",
-      url: "https://www.youtube.com"
+      url: "https://www.youtube.com/watch?v=a_iQb1lnAEQ"
     },
     {
-      title: "Targeted Interactive Drills",
+      title: "CSS Layout Practice",
       type: "practice",
       badge: "Hands-on Practice",
-      description: "Guided exercises designed to reinforce core syntax, edge cases, and algorithmic thinking.",
+      description: "Practice Flexbox, Grid, spacing, alignment, and responsive layouts.",
       actionText: "Practice Now",
-      url: "https://exercism.org"
+      url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout"
     },
     {
-      title: "Essential Concept Cheatsheet",
+      title: "HTML & CSS Reference",
       type: "guide",
       badge: "Quick Reference",
-      description: "Concise summary of patterns, syntax rules, and memory representations.",
+      description: "Review HTML elements, CSS properties, selectors, and web development concepts.",
       actionText: "Review Guide",
-      url: "https://devdocs.io"
+      url: "https://developer.mozilla.org/en-US/docs/Web"
+    }
+  ],
+
+  "DOM Manipulation": [
+    {
+      title: "JavaScript DOM Manipulation",
+      type: "video",
+      badge: "Video Tutorial",
+      description: "Learn how JavaScript interacts with HTML elements through the DOM.",
+      actionText: "Watch Now",
+      url: "https://www.youtube.com/watch?v=5fb2aPlgoys"
+    },
+    {
+      title: "DOM Manipulation Practice",
+      type: "practice",
+      badge: "Hands-on Practice",
+      description: "Practice selecting, modifying, creating, and removing DOM elements.",
+      actionText: "Practice Now",
+      url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/DOM_scripting"
+    },
+    {
+      title: "DOM API Reference",
+      type: "guide",
+      badge: "Quick Reference",
+      description: "Reference common DOM methods and properties used in JavaScript.",
+      actionText: "Review Guide",
+      url: "https://developer.mozilla.org/en-US/docs/Web/API/Document"
+    }
+  ],
+
+  "Async JS": [
+    {
+      title: "JavaScript Async/Await and Promises",
+      type: "video",
+      badge: "Video Tutorial",
+      description: "Learn Promises, async functions, await, and asynchronous JavaScript.",
+      actionText: "Watch Now",
+      url: "https://www.youtube.com/watch?v=vn3tm0quoqE"
+    },
+    {
+      title: "Async JavaScript Practice",
+      type: "practice",
+      badge: "Hands-on Practice",
+      description: "Practice working with Promises and asynchronous operations.",
+      actionText: "Practice Now",
+      url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"
+    },
+    {
+      title: "Async JavaScript Reference",
+      type: "guide",
+      badge: "Quick Reference",
+      description: "Review asynchronous JavaScript, Promises, async, and await.",
+      actionText: "Review Guide",
+      url: "https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS"
+    }
+  ],
+
+  "Events": [
+    {
+      title: "JavaScript Events",
+      type: "video",
+      badge: "Video Tutorial",
+      description: "Learn how JavaScript responds to clicks, inputs, and other user interactions.",
+      actionText: "Watch Now",
+      url: "https://www.youtube.com/watch?v=UVRDq-wnfgk"
+    },
+    {
+      title: "Event Handling Practice",
+      type: "practice",
+      badge: "Hands-on Practice",
+      description: "Practice click, input, submit, and other event handlers using addEventListener.",
+      actionText: "Practice Now",
+      url: "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener"
+    },
+    {
+      title: "JavaScript Events Reference",
+      type: "guide",
+      badge: "Quick Reference",
+      description: "Review event types, event objects, and event listener concepts.",
+      actionText: "Review Guide",
+      url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Events"
+    }
+  ],
+
+  "Default": [
+    {
+      title: "JavaScript Full Course for Beginners",
+      type: "video",
+      badge: "Video Tutorial",
+      description: "A beginner-friendly JavaScript course covering programming and web scripting fundamentals.",
+      actionText: "Watch Now",
+      url: "https://www.youtube.com/watch?v=PkZNo7MFNFg"
+    },
+    {
+      title: "freeCodeCamp Coding Practice",
+      type: "practice",
+      badge: "Hands-on Practice",
+      description: "Practice programming concepts through interactive coding exercises.",
+      actionText: "Practice Now",
+      url: "https://www.freecodecamp.org/learn/"
+    },
+    {
+      title: "MDN Web Documentation",
+      type: "guide",
+      badge: "Quick Reference",
+      description: "Reference web development concepts, JavaScript features, APIs, HTML, and CSS.",
+      actionText: "Review Guide",
+      url: "https://developer.mozilla.org/en-US/docs/Web"
     }
   ]
 };
@@ -547,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Switch smoothly between screens without reloading the page.
- * @param {string} screenName - "welcome", "skills", "quiz", "results", "gap", "learning", "retake", "improvement", "dashboard"
+ * @param {string} screenName - "welcome", "skills", "quiz", "results", "gap", "learning", "dashboard"
  */
 function navigateTo(screenName) {
   const screens = document.querySelectorAll(".screen");
@@ -621,8 +521,6 @@ function restartApp() {
   appState.weakestTopic = null;
   
   appState.initialScorePercent = 0;
-  appState.retakeScorePercent = 0;
-  appState.improvementPercent = 0;
   appState.quizzesCompleted = 0;
   appState.history = [];
   appState.currentQuizType = "initial";
@@ -708,10 +606,16 @@ function renderCurrentQuestion() {
     optionBtn.className = `option-item ${isSelected ? "selected" : ""}`;
     optionBtn.onclick = () => selectOption(optIndex);
 
-    optionBtn.innerHTML = `
-      <span class="option-marker">${optionLetters[optIndex]}</span>
-      <span class="option-text">${optText}</span>
-    `;
+    const marker = document.createElement("span");
+    marker.className = "option-marker";
+    marker.textContent = optionLetters[optIndex];
+
+    const text = document.createElement("span");
+    text.className = "option-text";
+    text.textContent = optText;
+
+    optionBtn.appendChild(marker);
+    optionBtn.appendChild(text);
 
     optionsList.appendChild(optionBtn);
   });
@@ -1002,37 +906,49 @@ function showResults() {
   }
 
 
-  // --------------------------------------------------
-  // 3. Competency Gap Banner
-  // --------------------------------------------------
+// --------------------------------------------------
+// 3. Competency Gap Banner
+// --------------------------------------------------
 
-  const weakBanner =
-    document.getElementById("result-weak-banner");
+const weakBanner =
+  document.getElementById("result-weak-banner");
 
-  const weakSummary =
-    document.getElementById("result-weak-summary");
+const weakSummary =
+  document.getElementById("result-weak-summary");
+
+const weakTitle =
+  weakBanner.querySelector("h4");
+
+const weakIcon =
+  weakBanner.querySelector(".weak-callout-icon");
 
 
-  if (hasGap) {
+if (hasGap) {
 
-    weakBanner.style.display = "flex";
+  weakBanner.style.display = "flex";
 
-    weakSummary.innerHTML =
-      `We found that <strong>${weakest}</strong> is currently your weakest area (<strong>${weakestScore}% proficiency</strong>).`;
+  weakTitle.textContent =
+    "Competency Gap Detected";
 
-  } else {
+  weakIcon.textContent =
+    "!";
 
-    weakBanner.style.display = "flex";
+  weakSummary.innerHTML =
+    `We found that <strong>${weakest}</strong> is currently your weakest area (<strong>${weakestScore}% proficiency</strong>).`;
 
-    weakBanner.querySelector("h4").textContent =
-      "No Competency Gaps Detected";
+} else {
 
-    weakBanner.querySelector(".weak-callout-icon").textContent =
-      "✓";
+  weakBanner.style.display = "flex";
 
-    weakSummary.innerHTML =
-      "You achieved <strong>70% or above</strong> across all assessed topics. Keep building on your current knowledge.";
-  }
+  weakTitle.textContent =
+    "No Competency Gaps Detected";
+
+  weakIcon.textContent =
+    "✓";
+
+  weakSummary.innerHTML =
+    "You achieved <strong>70% or above</strong> across all assessed topics. Keep building on your current knowledge.";
+}
 
 
   // --------------------------------------------------
@@ -1078,7 +994,9 @@ function showResults() {
       weakest
     );
   }
+
 }
+  
 
 /**
  * Populates the dedicated Competency Gap Deep-Dive screen.
@@ -1086,7 +1004,11 @@ function showResults() {
 function loadCompetencyGap(topic, proficiency) {
   document.getElementById("gap-topic-name").textContent = topic;
   document.getElementById("gap-proficiency").textContent = `${proficiency}%`;
-  document.getElementById("gap-meter-fill").style.width = `${proficiency}%`;
+
+  const gapMeterFill = document.getElementById("gap-meter-fill");
+  if (gapMeterFill) {
+    gapMeterFill.style.width = `${proficiency}%`;
+  }
 
   const levelTag = document.getElementById("gap-level-tag");
   const explanationEl = document.getElementById("gap-explanation-text");
@@ -1094,61 +1016,32 @@ function loadCompetencyGap(topic, proficiency) {
 
   if (proficiency < 40) {
     levelTag.textContent = "Critical Competency Gap";
-    explanationEl.textContent = `You scored ${proficiency}% in ${topic}. Students who struggle with this area often encounter difficulties with call stack mechanics, recursion tree tracing, and base condition bounds.`;
-    actionEl.textContent = `Focus on ${topic} fundamentals, step-by-step base cases, and problem decomposition before attempting complex challenges.`;
+
+    explanationEl.textContent =
+      `You scored ${proficiency}% in ${topic}. Students who struggle with this area often encounter difficulties with call stack mechanics, recursion tree tracing, and base condition bounds.`;
+
+    actionEl.textContent =
+      `Focus on ${topic} fundamentals, step-by-step base cases, and problem decomposition before attempting complex challenges.`;
+
   } else if (proficiency < 70) {
     levelTag.textContent = "Moderate Competency Gap";
-    explanationEl.textContent = `You have partial familiarity with ${topic} (${proficiency}%), but lack consistency on edge-case behavior and advanced patterns.`;
-    actionEl.textContent = `Review 2-3 code walkthroughs focusing specifically on boundary cases, then test your understanding.`;
+
+    explanationEl.textContent =
+      `You have partial familiarity with ${topic} (${proficiency}%), but lack consistency on edge-case behavior and advanced patterns.`;
+
+    actionEl.textContent =
+      `Review 2-3 code walkthroughs focusing specifically on boundary cases, then test your understanding.`;
+
   } else {
-    function loadCompetencyGap(topic, proficiency) {
-
-  document.getElementById("gap-topic-name").textContent =
-    topic;
-
-  document.getElementById("gap-proficiency").textContent =
-    `${proficiency}%`;
-
-  document.getElementById("gap-meter-fill").style.width =
-    `${proficiency}%`;
-
-
-  const levelTag =
-    document.getElementById("gap-level-tag");
-
-  const explanationEl =
-    document.getElementById("gap-explanation-text");
-
-  const actionEl =
-    document.getElementById("gap-recommended-action");
-
-
-  if (proficiency < 40) {
-
-    levelTag.textContent =
-      "Critical Competency Gap";
+    levelTag.textContent = "Strong Competency";
 
     explanationEl.textContent =
-      `You scored ${proficiency}% in ${topic}. This indicates that the fundamentals need significant reinforcement.`;
+      `You scored ${proficiency}% in ${topic}, showing a strong understanding of the topic.`;
 
     actionEl.textContent =
-      `Focus on ${topic} fundamentals, work through beginner-level examples, and use the recommended learning resources to strengthen your understanding.`;
-
-  } else if (proficiency < 70) {
-
-    levelTag.textContent =
-      "Moderate Competency Gap";
-
-    explanationEl.textContent =
-      `You have partial familiarity with ${topic} (${proficiency}%), but some concepts need additional practice and reinforcement.`;
-
-    actionEl.textContent =
-      `Review the recommended learning materials and practice the weaker concepts before moving to more advanced problems.`;
+      `Continue practicing ${topic} problems to maintain your understanding and improve your problem-solving speed.`;
   }
 }
-  }
-}
-
 
 // ==========================================================================
 // 10. RECOMMENDED LEARNING SECTION
@@ -1187,227 +1080,7 @@ function loadLearningResources(topic) {
     grid.appendChild(card);
   });
 
-  // Update retake button label
-  const retakeBtn = document.getElementById("btn-start-retake");
-  if (retakeBtn) {
-    retakeBtn.textContent = `Take ${topic} Quiz Again 🚀`;
-  }
-}
-
-
-// ==========================================================================
-// 11. TARGETED RETAKE QUIZ (Weak Topic Focused)
-// ==========================================================================
-
-/**
- * Starts the focused 5-question retake quiz on the user's weakest topic.
- */
-function startTargetedRetake() {
-  const weakTopic = appState.weakestTopic;
-  startRetakeQuiz(weakTopic);
-}
-
-/**
- * Configures and loads the targeted retake quiz.
- * === BACKEND API INTEGRATION POINT ===
- * Later, replace mock questions with:
- *   const response = await fetch(`/api/retake?topic=${topic}&count=5`);
- *   appState.questions = await response.json();
- */
-function startRetakeQuiz(topic) {
-  appState.currentQuizType = "retake";
-  appState.currentQuestionIndex = 0;
-  appState.userAnswers = {};
-
-  // Load focused questions for this weak topic
-  appState.questions = retakeQuestionsData[topic] || retakeQuestionsData.Recursion || retakeQuestionsData.General;
-
-  // Update header badges
-  document.getElementById("retake-topic-badge").textContent = `Topic: ${topic}`;
-
-  // Render first question
-  renderCurrentRetakeQuestion();
-
-  // Navigate to retake quiz screen
-  navigateTo("retake");
-}
-
-/**
- * Render current question for the targeted retake quiz.
- */
-function renderCurrentRetakeQuestion() {
-  const q = appState.questions[appState.currentQuestionIndex];
-  if (!q) return;
-
-  const total = appState.questions.length;
-  const currentNum = appState.currentQuestionIndex + 1;
-
-  // 1. Update counter & progress
-  document.getElementById("retake-counter").textContent = `Question ${currentNum}/${total}`;
-  const progressPercent = Math.round((currentNum / total) * 100);
-  document.getElementById("retake-progress-fill").style.width = `${progressPercent}%`;
-
-  // 2. Question text
-  document.getElementById("retake-question-text").textContent = q.question;
-
-  // 3. Options
-  const optionsList = document.getElementById("retake-options-list");
-  optionsList.innerHTML = "";
-
-  const selectedAnswer = appState.userAnswers[appState.currentQuestionIndex];
-  const optionLetters = ["A", "B", "C", "D"];
-
-  q.options.forEach((optText, optIndex) => {
-    const isSelected = selectedAnswer === optIndex;
-    const optionBtn = document.createElement("button");
-    optionBtn.type = "button";
-    optionBtn.className = `option-item ${isSelected ? "selected" : ""}`;
-    optionBtn.onclick = () => selectRetakeOption(optIndex);
-
-    optionBtn.innerHTML = `
-      <span class="option-marker">${optionLetters[optIndex]}</span>
-      <span class="option-text">${optText}</span>
-    `;
-
-    optionsList.appendChild(optionBtn);
-  });
-
-  // 4. Controls
-  const prevBtn = document.getElementById("btn-retake-prev");
-  const nextBtn = document.getElementById("btn-retake-next");
-
-  prevBtn.disabled = appState.currentQuestionIndex === 0;
-
-  const hasSelected = selectedAnswer !== undefined;
-  nextBtn.disabled = !hasSelected;
-
-  if (currentNum === total) {
-    nextBtn.textContent = "Submit Retake Assessment ✓";
-  } else {
-    nextBtn.textContent = "Next →";
-  }
-}
-
-/**
- * Option selection for retake quiz.
- */
-function selectRetakeOption(optionIndex) {
-  appState.userAnswers[appState.currentQuestionIndex] = optionIndex;
-  renderCurrentRetakeQuestion();
-}
-
-/**
- * Previous question in retake.
- */
-function prevRetakeQuestion() {
-  if (appState.currentQuestionIndex > 0) {
-    appState.currentQuestionIndex--;
-    renderCurrentRetakeQuestion();
-  }
-}
-
-/**
- * Next question in retake or submit.
- */
-function nextRetakeQuestion() {
-  const total = appState.questions.length;
-  if (appState.currentQuestionIndex < total - 1) {
-    appState.currentQuestionIndex++;
-    renderCurrentRetakeQuestion();
-  } else {
-    submitRetakeAssessment();
-  }
-}
-
-/**
- * Submit retake quiz, calculate new score and improvement, show Improvement screen.
- */
-function submitRetakeAssessment() {
-  // 1. Calculate retake score
-  const retakeScore = calculateScore(appState.questions, appState.userAnswers);
-  appState.retakeScorePercent = retakeScore;
-
-  // 2. Initial score for this weak topic
-  const initialTopicScore = appState.topicScores[appState.weakestTopic] ?? 30;
-
-  // 3. Calculate improvement percentage
-  appState.improvementPercent = calculateImprovement(initialTopicScore, retakeScore);
-
-  // 4. Update session stats
-  appState.quizzesCompleted += 1;
-
-  // Record history log
-  appState.history.unshift({
-    topic: appState.weakestTopic,
-    before: initialTopicScore,
-    after: retakeScore,
-    diff: appState.improvementPercent,
-    timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-  });
-
-  // 5. Render Improvement Screen
-  showImprovementScreen(appState.weakestTopic, initialTopicScore, retakeScore, appState.improvementPercent);
-  navigateTo("improvement");
-}
-
-/**
- * Calculate net improvement percentage.
- * @param {number} beforeScore
- * @param {number} afterScore
- * @returns {number} delta e.g. 45
- */
-function calculateImprovement(beforeScore, afterScore) {
-  return afterScore - beforeScore;
-}
-
-
-// ==========================================================================
-// 12. IMPROVEMENT SCREEN DISPLAY
-// ==========================================================================
-
-/**
- * Populates before/after comparison visual on Screen 8.
- */
-function showImprovementScreen(topic, beforeScore, afterScore, delta) {
-  // Titles
-  document.getElementById("improve-topic-name").textContent = topic;
-  document.getElementById("improve-before-topic").textContent = topic;
-  document.getElementById("improve-after-topic").textContent = topic;
-
-  // Before Box
-  document.getElementById("improve-before-score").textContent = `${beforeScore}%`;
-  document.getElementById("improve-before-bar").style.width = `${beforeScore}%`;
-
-  // After Box
-  document.getElementById("improve-after-score").textContent = `${afterScore}%`;
-  document.getElementById("improve-after-bar").style.width = `${afterScore}%`;
-
-  // Delta Badge
-  const sign = delta >= 0 ? "+" : "";
-  const deltaBadge = document.getElementById("improve-delta-badge");
-  deltaBadge.textContent = `${sign}${delta}%`;
-
-  // Dynamic feedback message
-  const headlineEl = document.getElementById("improvement-headline");
-  const messageEl = document.getElementById("improvement-message");
-  const metricDescEl = document.getElementById("improve-metric-desc");
-
-  if (delta > 0) {
-    headlineEl.textContent = "Outstanding Progress! 🎉";
-    messageEl.textContent = `Great! Your proficiency improved by ${delta}%.`;
-    metricDescEl.textContent = `You scored ${beforeScore}% earlier, and after focused review jumped to ${afterScore}%. Your competency gap in ${topic} has been successfully closed!`;
-  } else if (delta === 0) {
-    headlineEl.textContent = "Steady Performance";
-    messageEl.textContent = `Your score remained consistent at ${afterScore}%.`;
-    metricDescEl.textContent = `Consider reviewing the cheat sheet once more to reinforce the trickier patterns before retrying.`;
-  } else {
-    headlineEl.textContent = "Keep Practicing!";
-    messageEl.textContent = `You scored ${afterScore}%. Keep going, mastery comes with repetition!`;
-    metricDescEl.textContent = `Take some time to explore the interactive challenges before your next attempt.`;
-  }
-
-  // Pre-render dashboard
-  renderDashboard();
+  
 }
 
 
